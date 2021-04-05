@@ -1,0 +1,58 @@
+.d-flex {
+  display: flex;
+}
+.justify-content-between {
+  justify-content: space-between;
+}
+.align-items-center {
+  align-items: center;
+}
+.bold {
+  font-weight: 700;
+}
+@for $index from 1 to 7 {
+  // Margins
+  .m-#{$index} {
+    margin: 0.25 * 1rem;
+  }
+  .mr-#{$index} {
+    margin-right: 0.25 * 1rem;
+  }
+  .ml-#{$index} {
+    margin-left: 0.25 * 1rem;
+  }
+  .mt-#{$index} {
+    margin-top: 0.25 * 1rem;
+  }
+  .mb-#{$index} {
+    margin-bottom: 0.25 * 1rem;
+  }
+  .mx-#{$index} {
+    margin: 0 0.25 * 1rem 0.25 * 1rem 0;
+  }
+  .my-#{$index} {
+    margin: 0.25 * 1rem 0 0 0.25 * 1rem;
+  }
+  //   Paddings
+  .p-#{$index} {
+    padding: 0.25 * 1rem;
+  }
+  .pr-#{$index} {
+    padding-right: 0.25 * 1rem;
+  }
+  .pl-#{$index} {
+    padding-left: 0.25 * 1rem;
+  }
+  .pt-#{$index} {
+    padding-top: 0.25 * 1rem;
+  }
+  .pb-#{$index} {
+    padding-bottom: 0.25 * 1rem;
+  }
+  .px-#{$index} {
+    padding: 0 0.25 * 1rem 0.25 * 1rem 0;
+  }
+  .py-#{$index} {
+    padding: 0.25 * 1rem 0 0 0.25 * 1rem;
+  }
+}

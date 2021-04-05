@@ -1,0 +1,23 @@
+.main {
+  background-image: url(/Assets/images/game-play-bg.png);
+  background-repeat: no-repeat;
+  background-size: cover;
+  margin: 0;
+  height: 100vh;
+}
+.game-board-wrapper {
+  border: 1px solid #853594;
+  margin: 1rem auto;
+}
+.game-board {
+  background: #fff;
+  background-image: linear-gradient(#853594 0.1em, transparent 0.1em),
+    linear-gradient(90deg, #853594 0.1em, transparent 0.1em);
+}
+
+.game-card {
+  border-radius: 1rem;
+  padding: 1.5rem 2rem;
+  margin: 0 auto;
+  background-color: white;
+}
