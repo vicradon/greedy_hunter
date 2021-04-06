@@ -10,6 +10,11 @@
 .bold {
   font-weight: 700;
 }
+@for $index from 1 to 4 {
+  .font-size-#{$index}-rem {
+    font-size: $index * 1rem;
+  }
+}
 @for $index from 1 to 7 {
   // Margins
   .m-#{$index} {

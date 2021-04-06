@@ -1,0 +1,35 @@
+:root {
+  --button-color: #853594;
+  --main-bg: #43144a;
+}
+
+.main {
+  background-color: var(--main-bg);
+  display: flex;
+  align-items: center;
+  flex-flow: column;
+  height: 100vh;
+}
+.main::before,
+.main::after {
+  background-image: radial-gradient(circle at 50%, #51265c 20%, #43144a 20%);
+  background-position: 0 0;
+  background-size: 50px 50px;
+}
+
+.game_header {
+  color: #ffc700;
+  font-size: 3rem;
+}
+
+.action_button {
+  background-color: var(--button-color);
+  border-radius: 0.3rem;
+  color: #d1c2c2;
+  padding: 0.5rem;
+  border: 1px solid var(--button-color);
+}
+.grid_selector_text {
+  color: #ee8d94;
+  font-size: 1.5rem;
+}

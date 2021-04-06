@@ -1,13 +1,14 @@
-import React, { Fragment, useContext, useState } from "react";
+import character from "../Assets/icons/character.svg";
 import { useHistory } from "react-router-dom";
-import character from "../../Assets/icons/character.svg";
-import { Context } from "../../Store";
 
-function PrePostGame() {
+import styles from "./PrePostGame.module.scss";
+import { useContext, useState } from "react";
+import { Context } from "../Store";
+
+function PrePostGameLayout({ children }) {
   const { globalState, dispatch } = useContext(Context);
   const { grid_side } = globalState;
   const [gridSide, setGridSide] = useState(grid_side);
-
   const history = useHistory();
   const startGame = (event) => {
     event.preventDefault();
@@ -17,17 +18,16 @@ function PrePostGame() {
     });
     history.push("/game");
   };
-  return (
-    <Fragment>
-      <img src={character} alt="FGame Character" />
 
-      <h1>Greedy Hunter</h1>
-      <p>The aim is to eat all the food in record time</p>
-      <p>Confiure your game grid below 👇🏼</p>
+  return (
+    <div className={styles.main}>
+      <img src={character} alt="Game Character" />
+
+      {children}
 
       <form onSubmit={startGame}>
         <div className="d-flex justify-content-center align-items-center">
-          <p className="mr-2">Game grid</p>
+          <p className={`mr-2 ${styles.grid_selector_text}`}>Game grid</p>
           <select
             onChange={({ target }) => setGridSide(target.value)}
             value={gridSide}
@@ -43,10 +43,10 @@ function PrePostGame() {
           </select>
         </div>
 
-        <button>Start Game</button>
+        <button className={styles.action_button}>Start Game</button>
       </form>
-    </Fragment>
+    </div>
   );
 }
 
-export default PrePostGame;
+export default PrePostGameLayout;

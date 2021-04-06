@@ -1,7 +1,8 @@
 import { useContext, useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
 import Player from "../../Components/Player";
 import { Context } from "../../Store";
-import "./GamePlay.scss";
+import styles from "./GamePlay.module.scss";
 import generateFoodItems from "./generateFoodItems";
 
 /**
@@ -18,7 +19,7 @@ function GamePlay() {
     x: 0,
     y: 0,
   });
-  const maxMoves = grid * grid * 0.5;
+  const maxMoves = Math.ceil(grid * grid * 0.5);
   const [totalMoves, setTotalMoves] = useState(0);
   const scales = {
     5: 13,
@@ -34,10 +35,11 @@ function GamePlay() {
   const squareUnit = grid * SCALE;
   const gridEdge = grid * grid * SCALE;
 
-  console.log(grid * squareUnit);
+  const history = useHistory();
+
   const handleKeyDown = ({ keyCode }) => {
     if (totalMoves === maxMoves) {
-      return;
+      history.push("/game-over");
     }
     let tempCoordinates = { ...coordinates };
 
@@ -87,6 +89,9 @@ function GamePlay() {
         squareUnit,
         grid,
       });
+      if (!foodItems.length) {
+        history.push("/game-won");
+      }
       setFoodItems(foodItems);
     }
   };
@@ -135,13 +140,14 @@ function GamePlay() {
 
     const gridArray = generateGridArray();
     const foodItems = generateFoodItems({ gridArray, SCALE, squareUnit, grid });
+
     setFoodItems(foodItems);
     setGridArray(gridArray);
-  }, [grid, squareUnit]);
+  }, [grid, squareUnit, SCALE]);
 
   return (
-    <div className="d-flex align-items-center main">
-      <div className="game-card">
+    <div className={`d-flex align-items-center ${styles.main}`}>
+      <div className={styles.game_card}>
         <p>
           Grid:
           <span className="bold ml-2">
@@ -152,14 +158,14 @@ function GamePlay() {
           style={{
             width: `${grid * grid * SCALE + 2}px`,
           }}
-          className="game-board-wrapper"
+          className={styles.game_board_wrapper}
         >
           <div
             style={{
               backgroundSize: `${grid * SCALE}px ${grid * SCALE}px`,
               height: `${grid * grid * SCALE + 2}px`,
             }}
-            className="game-board"
+            className={styles.game_board}
           >
             <Player coordinates={coordinates} width={grid * SCALE} />
             {foodItems}
