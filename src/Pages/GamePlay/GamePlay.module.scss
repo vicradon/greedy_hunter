@@ -3,7 +3,10 @@
   background-repeat: no-repeat;
   background-size: cover;
   margin: 0;
-  height: 100vh;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 .game_board_wrapper {
   border: 1px solid #853594;
@@ -20,4 +23,14 @@
   padding: 1.5rem 2rem;
   margin: 0 auto;
   background-color: white;
+  margin-bottom: 2rem;
+}
+
+@media (max-width: 724px) {
+  .game_card {
+    padding: 1.5rem 1rem;
+  }
+  .main p {
+    font-size: 0.8rem;
+  }
 }

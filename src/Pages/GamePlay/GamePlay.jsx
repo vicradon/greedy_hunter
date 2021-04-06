@@ -1,27 +1,44 @@
 import { useContext, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import Player from "../../Components/Player";
+import useWindowSize from "../../hooks/useWindowSize";
 import { Context } from "../../Store";
+import Alert from "./Alert";
+import ArrowKeyPad from "./ArrowKeyPad";
+import formatSecondsToTimeString from "./formatSecondsToTimeString";
 import styles from "./GamePlay.module.scss";
 import generateFoodItems from "./generateFoodItems";
 
-/**
- * Limit navigate to game over screen if player exhausts moves
- * Style the board to match Figma
- */
-
 function GamePlay() {
-  const { globalState } = useContext(Context);
-  const grid = globalState.grid_side;
+  const [alert, setAlert] = useState({ display: false, content: "" });
+  const { globalState, dispatch } = useContext(Context);
+  const { width } = useWindowSize();
+  const [elapsedSeconds, setElapsedSeconds] = useState(0);
   const [gridArray, setGridArray] = useState([]);
   const [foodItems, setFoodItems] = useState([]);
   const [coordinates, setCoordinates] = useState({
     x: 0,
     y: 0,
   });
-  const maxMoves = Math.ceil(grid * grid * 0.5);
   const [totalMoves, setTotalMoves] = useState(0);
-  const scales = {
+  const history = useHistory();
+
+  const grid = globalState.grid_side;
+  const maxMoves = Math.ceil(grid * grid * 0.5);
+  const isMobileBrowser = navigator.userAgentData.mobile;
+
+  const smallScales = {
+    5: 11,
+    6: 7,
+    7: 5,
+    8: 4.3,
+    9: 3.5,
+    10: 2.8,
+    11: 2.4,
+    12: 1.9,
+  };
+
+  const normalScales = {
     5: 13,
     6: 11,
     7: 9,
@@ -31,15 +48,26 @@ function GamePlay() {
     11: 3.5,
     12: 3,
   };
-  const SCALE = scales[grid];
+
+  const SCALE = width > 576 ? normalScales[grid] : smallScales[grid];
   const squareUnit = grid * SCALE;
   const gridEdge = grid * grid * SCALE;
 
-  const history = useHistory();
-
+  const handleEndGame = () => {
+    dispatch({
+      type: "END_GAME",
+      payload: {
+        eaten_food: grid - foodItems.length,
+        total_food: grid,
+        elapsed_seconds: elapsedSeconds,
+      },
+    });
+  };
   const handleKeyDown = ({ keyCode }) => {
     if (totalMoves === maxMoves) {
-      history.push("/game-over");
+      handleEndGame();
+
+      history.replace("/game-over");
     }
     let tempCoordinates = { ...coordinates };
 
@@ -74,14 +102,12 @@ function GamePlay() {
   };
 
   const handleFoodIntake = (coordinates) => {
-    if (
-      gridArray[coordinates.x / squareUnit][[coordinates.y / squareUnit]] ===
-      "x"
-    ) {
+    const rowIndex = Math.ceil(coordinates.x / squareUnit);
+    const colIndex = Math.ceil(coordinates.y / squareUnit);
+
+    if (gridArray[rowIndex][colIndex] === "x") {
       const newGridArray = JSON.parse(JSON.stringify(gridArray));
-      newGridArray[coordinates.x / squareUnit][
-        [coordinates.y / squareUnit]
-      ] = 0;
+      newGridArray[rowIndex][colIndex] = 0;
       setGridArray(newGridArray);
       const foodItems = generateFoodItems({
         gridArray: newGridArray,
@@ -90,11 +116,19 @@ function GamePlay() {
         grid,
       });
       if (!foodItems.length) {
-        history.push("/game-won");
+        handleEndGame();
+        history.replace("/game-won");
       }
       setFoodItems(foodItems);
     }
   };
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setElapsedSeconds(elapsedSeconds + 1);
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [elapsedSeconds]);
 
   useEffect(() => {
     window.addEventListener("keydown", handleKeyDown);
@@ -145,15 +179,43 @@ function GamePlay() {
     setGridArray(gridArray);
   }, [grid, squareUnit, SCALE]);
 
+  useEffect(() => {
+    const movement_instruction_displayed = JSON.parse(
+      localStorage.getItem("movement_instruction_displayed")
+    );
+
+    if (isMobileBrowser && !movement_instruction_displayed) {
+      setAlert({ display: true, content: "Use arrow keypad to move" });
+      localStorage.setItem("movement_instruction_displayed", true);
+    }
+
+    if (!isMobileBrowser && !movement_instruction_displayed) {
+      setAlert({ display: true, content: "Use WASD or Arrow Keys to move" });
+
+      localStorage.setItem("movement_instruction_displayed", true);
+    }
+  }, [isMobileBrowser]);
+
   return (
-    <div className={`d-flex align-items-center ${styles.main}`}>
-      <div className={styles.game_card}>
-        <p>
-          Grid:
-          <span className="bold ml-2">
-            {grid} x {grid}
-          </span>
-        </p>
+    <div className={styles.main}>
+      <div
+        style={{ maxWidth: "100%" }} // `${grid * grid * SCALE + 2}px` }}
+        className={styles.game_card}
+      >
+        <div className="d-flex justify-content-between aling-items-center">
+          <p>
+            Grid:
+            <span className="bold ml-2">
+              {grid} x {grid}
+            </span>
+          </p>
+          <p>
+            Time spent:
+            <span className="bold ml-2">
+              {formatSecondsToTimeString(elapsedSeconds)} secs
+            </span>
+          </p>
+        </div>
         <div
           style={{
             width: `${grid * grid * SCALE + 2}px`,
@@ -182,6 +244,9 @@ function GamePlay() {
           </p>
         </div>
       </div>
+
+      {isMobileBrowser && <ArrowKeyPad handleKeyDown={handleKeyDown} />}
+      {alert.display && <Alert content={alert.content} setAlert={setAlert} />}
     </div>
   );
 }

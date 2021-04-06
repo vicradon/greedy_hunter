@@ -8,6 +8,16 @@ const reducer = (state, action) => {
         grid_side: action.payload.grid_side,
       };
     }
+    case "END_GAME": {
+      return {
+        ...state,
+        previous_game_stats: {
+          eaten_food: action.payload.eaten_food,
+          total_food: action.payload.total_food,
+          elapsed_seconds: action.payload.elapsed_seconds,
+        },
+      };
+    }
     default:
       return state;
   }
@@ -15,6 +25,11 @@ const reducer = (state, action) => {
 
 const initialState = {
   grid_side: 10,
+  previous_game_stats: {
+    eaten_food: 0,
+    total_food: 0,
+    elapsed_seconds: 0,
+  },
 };
 
 const Store = ({ children }) => {

@@ -4,60 +4,70 @@
 .justify-content-between {
   justify-content: space-between;
 }
+.justify-content-center {
+  justify-content: center;
+}
 .align-items-center {
   align-items: center;
+}
+.flex-column {
+  flex-direction: column;
+}
+.text-align-center {
+  text-align: center;
 }
 .bold {
   font-weight: 700;
 }
-@for $index from 1 to 4 {
+
+@for $index from 1 through 3 {
   .font-size-#{$index}-rem {
     font-size: $index * 1rem;
   }
 }
-@for $index from 1 to 7 {
+@for $index from 1 through 8 {
   // Margins
   .m-#{$index} {
-    margin: 0.25 * 1rem;
+    margin: $index * 0.25rem;
   }
   .mr-#{$index} {
-    margin-right: 0.25 * 1rem;
+    margin-right: $index * 0.25rem;
   }
   .ml-#{$index} {
-    margin-left: 0.25 * 1rem;
+    margin-left: $index * 0.25rem;
   }
   .mt-#{$index} {
-    margin-top: 0.25 * 1rem;
+    margin-top: $index * 0.25rem;
   }
   .mb-#{$index} {
-    margin-bottom: 0.25 * 1rem;
+    margin-bottom: $index * 0.25rem;
   }
   .mx-#{$index} {
-    margin: 0 0.25 * 1rem 0.25 * 1rem 0;
+    margin: 0 $index * 0.25rem $index * 0.25rem 0;
   }
   .my-#{$index} {
-    margin: 0.25 * 1rem 0 0 0.25 * 1rem;
+    margin: $index * 0.25rem 0 0 $index * 0.25rem;
   }
   //   Paddings
   .p-#{$index} {
-    padding: 0.25 * 1rem;
+    padding: $index * 0.25rem;
   }
   .pr-#{$index} {
-    padding-right: 0.25 * 1rem;
+    padding-right: $index * 0.25rem;
   }
   .pl-#{$index} {
-    padding-left: 0.25 * 1rem;
+    padding-left: $index * 0.25rem;
   }
   .pt-#{$index} {
-    padding-top: 0.25 * 1rem;
+    padding-top: $index * 0.25rem;
   }
   .pb-#{$index} {
-    padding-bottom: 0.25 * 1rem;
+    padding-bottom: $index * 0.25rem;
   }
   .px-#{$index} {
-    padding: 0 0.25 * 1rem 0.25 * 1rem 0;
+    padding: 0 $index * 0.25rem $index * 0.25rem 0;
   }
   .py-#{$index} {
-    padding: 0.25 * 1rem 0 0 0.25 * 1rem;
+    padding: $index * 0.25rem 0 0 $index * 0.25rem;
   }
 }
